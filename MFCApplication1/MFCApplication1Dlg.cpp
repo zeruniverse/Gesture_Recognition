@@ -7,6 +7,9 @@
 #include "MFCApplication1Dlg.h"
 #include "afxdialogex.h"
 #include "CvvImage.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -17,6 +20,9 @@ CRect rect;
 CDC *pDC;
 HDC hDC;
 CWnd *pwnd;
+int gamestartcounting = 0;
+int computergesture = 0;
+int usergesture = -1;//-1-undetected
 // CMFCApplication1Dlg dialog
 
 
@@ -38,6 +44,9 @@ BEGIN_MESSAGE_MAP(CMFCApplication1Dlg, CDialogEx)
 	ON_WM_TIMER()
 	ON_BN_CLICKED(IDC_BUTTON1, &CMFCApplication1Dlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMFCApplication1Dlg::OnBnClickedButton2)
+	ON_WM_CREATE()
+	ON_WM_DESTROY()
+	ON_WM_SHOWWINDOW()
 END_MESSAGE_MAP()
 
 
@@ -105,19 +114,67 @@ HCURSOR CMFCApplication1Dlg::OnQueryDragIcon()
 void CMFCApplication1Dlg::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: Add your message handler code here and/or call default
-	/************************************************************************/
-	/* 显示摄像头                                                           */
-	/************************************************************************/
-	IplImage* m_Frame;
-	m_Frame = cvQueryFrame(capture);
-	CvvImage m_CvvImage;
-	m_CvvImage.CopyOf(m_Frame, 1);
-	if (true)
-	{
-		m_CvvImage.DrawToHDC(hDC, &rect);
-		//cvWaitKey(10);  
+	if (nIDEvent == 1){
+		IplImage* m_Frame;
+		m_Frame = cvQueryFrame(capture);
+		cv::Mat matm = m_Frame;
+		CvvImage m_CvvImage;
+		m_CvvImage.CopyOf(m_Frame, 1);
+		if (true)
+		{
+			m_CvvImage.DrawToHDC(hDC, &rect);
+			//cvWaitKey(10);  
+			cv::imshow("GESTURE RECOGNITION", matm);
+		}
 	}
+	if (nIDEvent == 2){
+		TCHAR buf[50];
+		_itow_s(gamestartcounting--, buf,10);
+		GetDlgItem(IDC_STATICCOUNT)->SetWindowTextW(buf);
+		if (gamestartcounting < 0)
+		{
+			int u = usergesture;
+			switch (computergesture)
+			{
+			case 0: GetDlgItem(IDC_STATICCOUNT)->SetWindowTextW(_T("Scissor")); break;
+			case 1: GetDlgItem(IDC_STATICCOUNT)->SetWindowTextW(_T("Rock")); break;
+			case 2: GetDlgItem(IDC_STATICCOUNT)->SetWindowTextW(_T("Paper")); break;
+			}
+			if (u == computergesture)
+			{
 
+				GetDlgItem(IDC_STATICRESULT)->SetWindowTextW(_T("Tie"));
+			}
+			else if (u - computergesture == 1 || (u == 0 && computergesture == 2))//user win
+			{
+				CString tmp;
+				GetDlgItem(IDC_EDIT1)->GetWindowText(tmp);
+				_itow_s(_tstoi(tmp) + 1, buf, 30);
+				GetDlgItem(IDC_EDIT1)->SetWindowTextW(buf);
+
+				GetDlgItem(IDC_STATICRESULT)->SetWindowTextW(_T("You Win"));
+			}
+			else
+			{
+				CString tmp;
+				GetDlgItem(IDC_EDIT2)->GetWindowText(tmp);
+				_itow_s(_tstoi(tmp) + 1, buf, 30);
+				GetDlgItem(IDC_EDIT2)->SetWindowTextW(buf);
+				GetDlgItem(IDC_STATICRESULT)->SetWindowTextW(_T("You Lose"));
+			}
+			CString tmp,tmp2;
+			switch (u)
+			{
+			case -1:tmp = "Undetected"; break;
+			case 0:tmp = "Scissor"; break;
+			case 1:tmp = "Rock"; break;
+			case 2:tmp = "Paper"; break;
+			}
+			GetDlgItem(IDC_STATICRESULT)->GetWindowText(tmp2);
+			GetDlgItem(IDC_STATICRESULT)->SetWindowText(tmp2+"  (You:"+tmp+")");
+			KillTimer(2);
+		}
+	}
 	CDialogEx::OnTimer(nIDEvent);
 }
 
@@ -125,19 +182,48 @@ void CMFCApplication1Dlg::OnTimer(UINT_PTR nIDEvent)
 void CMFCApplication1Dlg::OnBnClickedButton1()
 {
 	// TODO: Add your control notification handler code here
+	KillTimer(2);
+	gamestartcounting = 3;
+	srand((unsigned)time(NULL));
+	computergesture = rand() % 3; //0-scissor, 1-rock, 2-paper
+	SetTimer(2, 1000, NULL);
+	char buf[30];
+	_itoa_s(gamestartcounting--, buf, 2,10);
+	GetDlgItem(IDC_STATICCOUNT)->SetWindowText(CString(buf));
+
+}
+
+
+void CMFCApplication1Dlg::OnBnClickedButton2()
+{
+	// TODO: Add your control notification handler code here
+	GetDlgItem(IDC_EDIT1)->SetWindowTextW(_T("0"));
+	GetDlgItem(IDC_EDIT2)->SetWindowTextW(_T("0"));
+	
+}
+
+
+int CMFCApplication1Dlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (CDialogEx::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	// TODO:  Add your specialized creation code here
 	if (!capture)
 	{
 		capture = cvCaptureFromCAM(0);
-		//AfxMessageBox("OK");  
+		  
 	}
 
 	if (!capture)
 	{
-		MessageBox(_T("无法打开摄像头"));
-		return;
+		MessageBox(_T("FAIL TO START CAMERA"));
+		return 0;
 	}
 
-	// 测试  
+	
+	
+	
 	IplImage* m_Frame;
 	m_Frame = cvQueryFrame(capture);
 	CvvImage m_CvvImage;
@@ -148,14 +234,29 @@ void CMFCApplication1Dlg::OnBnClickedButton1()
 		//cvWaitKey(10);  
 	}
 
-	// 设置计时器,每10ms触发一次事件  
 	SetTimer(1, 10, NULL);
+	return 0;
 }
 
 
-void CMFCApplication1Dlg::OnBnClickedButton2()
+void CMFCApplication1Dlg::OnDestroy()
 {
-	// TODO: Add your control notification handler code here
+	CDialogEx::OnDestroy();
+
+	// TODO: Add your message handler code here
 	cvReleaseCapture(&capture);
-	
+}
+
+
+void CMFCApplication1Dlg::OnShowWindow(BOOL bShow, UINT nStatus)
+{
+	CDialogEx::OnShowWindow(bShow, nStatus);
+
+	// TODO: Add your message handler code here
+	GetDlgItem(IDC_EDIT1)->SetWindowTextW(_T("0"));
+	GetDlgItem(IDC_EDIT2)->SetWindowTextW(_T("0"));
+	CFont *m_Font1 = new CFont;
+	m_Font1->CreatePointFont(160, _T("Arial Bold"));
+	CStatic * m_Label = (CStatic *)GetDlgItem(IDC_STATICCOUNT);
+	m_Label->SetFont(m_Font1);
 }
