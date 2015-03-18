@@ -6,11 +6,7 @@
 #include "MFCApplication1.h"
 #include "MFCApplication1Dlg.h"
 #include "afxdialogex.h"
-#include "CvvImage.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-
+#include "cvheader.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -25,7 +21,7 @@ int computergesture = 0;
 int usergesture = -1;//-1-undetected
 // CMFCApplication1Dlg dialog
 
-
+cv::CascadeClassifier face_cascade;
 
 CMFCApplication1Dlg::CMFCApplication1Dlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CMFCApplication1Dlg::IDD, pParent)
@@ -115,16 +111,15 @@ void CMFCApplication1Dlg::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: Add your message handler code here and/or call default
 	if (nIDEvent == 1){
-		IplImage* m_Frame;
-		m_Frame = cvQueryFrame(capture);
-		cv::Mat matm = m_Frame;
+		IplImage* myframe;
+		myframe = cvQueryFrame(capture);
+		cv::Mat m = myframe;
 		CvvImage m_CvvImage;
-		m_CvvImage.CopyOf(m_Frame, 1);
+		m_CvvImage.CopyOf(myframe, 1);
 		if (true)
 		{
 			m_CvvImage.DrawToHDC(hDC, &rect);
-			//cvWaitKey(10);  
-			cv::imshow("GESTURE RECOGNITION", matm);
+			usergesture = mygesturedetect(m, face_cascade);
 		}
 	}
 	if (nIDEvent == 2){
@@ -220,9 +215,7 @@ int CMFCApplication1Dlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		MessageBox(_T("FAIL TO START CAMERA"));
 		return 0;
 	}
-
-	
-	
+	if (!face_cascade.load("D:\haarcascade_frontalface_alt.xml")){ MessageBox(_T("--(!)Error loading haarcascade_frontalface_alt.xml\n")); };
 	
 	IplImage* m_Frame;
 	m_Frame = cvQueryFrame(capture);
@@ -234,7 +227,7 @@ int CMFCApplication1Dlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		//cvWaitKey(10);  
 	}
 
-	SetTimer(1, 10, NULL);
+	SetTimer(1, 11, NULL);
 	return 0;
 }
 
