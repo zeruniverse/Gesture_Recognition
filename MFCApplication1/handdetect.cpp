@@ -33,6 +33,8 @@ Rect facedetect(Mat frame, CascadeClassifier facecad)
 	p.height = 0;
 	p.width = 0;
 	p.x = 0;
+	int maxarea = -1;
+	int maxareai = -1;
 	p.y = 0;
 	cv::cvtColor(frame, frame_gray, CV_BGR2GRAY);
 	cv::equalizeHist(frame_gray, frame_gray);
@@ -40,9 +42,11 @@ Rect facedetect(Mat frame, CascadeClassifier facecad)
 	for (int i = 0; i < faces.size();i++) //consider the first face
 	{
 		cv::Point center(faces[i].x + faces[i].width*0.5, faces[i].y + faces[i].height*0.5);
+		maxareai = (faces[i].area()>maxarea) ? i : maxareai;
+		maxarea = (faces[i].area()>maxarea) ? faces[i].area() : maxarea;
 		ellipse(myframe, center, cv::Size(faces[i].width*0.5, faces[i].height*0.5), 0, 0, 360, cv::Scalar(255, 0, 255), 4, 8, 0);
 	}
-	p = faces[0];
+	if(faces.size()!=0) p = faces[maxareai];
 	return p;
 }
 
@@ -99,10 +103,10 @@ void SkinColorModel(Mat frame, Rect faceregion, int* ymax, int* ymin, int* crmax
 		*cbmax = 127;// (*cbmax > 127) ? 127 : *cbmax;
 		*cbmin = 77;// (*cbmin < 77) ? 77 : *cbmin;
 	}
-	*crmax = (*crmax > 173) ? 173 : *crmax;
+	/**crmax = (*crmax > 173) ? 173 : *crmax;
 	*crmin = (*crmin < 133) ? 133 : *crmin;
 	*cbmax = (*cbmax > 127) ? 127 : *cbmax;
-	*cbmin = (*cbmin < 77) ? 77 : *cbmin;
+	*cbmin = (*cbmin < 77) ? 77 : *cbmin;*/
 }
 
 void Get_hull()
@@ -177,6 +181,7 @@ int Get_Palm_Center()
 			palm_center.x = armcenter.x;
 			palm_center.y = armcenter.y;
 		}
+		if (palm->total < 3) palm_radius = 0;
 		cvCircle(&frame, palm_center, 5, CV_RGB(0, 255, 0), -1, CV_AA, 0);
 		ellipse(myframe, palm_center, cv::Size(palm_radius, palm_radius), 0, 0, 360, cv::Scalar(255, 0, 0), 4, 8, 0);
 		cvClearSeq(finger_dft);
@@ -319,49 +324,92 @@ int qcompare(const void * a, const void * b)
 {
 	return (*(int*)a - *(int*)b);
 }
-struct fingertips{
+struct mypoint{
 	int x;
 	int y;
 };
 int qcompare1(const void * a, const void * b)
 {
-	struct fingertips *ta = (struct fingertips *)a;
-	struct fingertips *tb = (struct fingertips *)b;
+	struct mypoint *ta = (struct mypoint *)a;
+	struct mypoint *tb = (struct mypoint *)b;
 	return (ta->x - tb->x);
+}
+double get_cos_value(CvPoint b, struct mypoint c)//palm_center - base point
+{
+	CvPoint a;
+	a.x = palm_center.x;
+	a.y = palm_center.y;
+	int vec1x = b.x - a.x;
+	int vec1y = b.y - a.y;
+	int vec2x = c.x - a.x;
+	int vec2y = c.y - a.y;
+	return ((double)(vec1x*vec2x + vec1y*vec2y)) / (sqrt((double)((vec1x*vec1x) + (vec1y*vec1y)))*sqrt((double)((vec2x*vec2x) + (vec2y*vec2y))));
 }
 int Get_fingertip() //number of fingertips
 {
-	int gaps[150];
-	struct fingertips possible_tips[150];
+	struct mypoint gaps[150];
+	struct mypoint possible_tips[150];
+	vector<struct mypoint> checked_tips;
+	struct mypoint mypoint_temp;
 	IplImage frame = myframe;
+	CvPoint tmp_cvpnt;
 	int cnt_finger = 0;
 	int pnt = 0;
+	if (palm_radius == 0) return 0;
 	for (int i = 0; i < finger_dft->total; i++)
 	{
 		CvPoint *temp = (CvPoint*)cvGetSeqElem(finger_dft, i);
-		gaps[i] = temp->x;
+		gaps[i].x = temp->x;
+		gaps[i].y = temp->y;
 	}
-	gaps[finger_dft->total] = -1;//lower bound
-	gaps[finger_dft->total+1] = 30000;//higher bound
-	std::qsort(gaps, finger_dft->total+2, sizeof(int), qcompare);
+	gaps[finger_dft->total].x = -1;
+	gaps[finger_dft->total].y = 0;//lower bound
+	gaps[finger_dft->total + 1].x = 30000;
+	gaps[finger_dft->total + 1].y = 0;
+	gaps[finger_dft->total+2].x = 30001;
+	gaps[finger_dft->total + 2].y = 30001;//higher bound
+	std::qsort(gaps, finger_dft->total + 3, sizeof(struct mypoint), qcompare1);
 	for (int i = 0; i < fingerseq->total; i++)
 	{
 		CvPoint *temp = (CvPoint*)cvGetSeqElem(fingerseq, i);
 		possible_tips[i].x = temp->x;
 		possible_tips[i].y = temp->y;
 	}
-	std::qsort(possible_tips, fingerseq->total, sizeof(struct fingertips), qcompare1);
+	std::qsort(possible_tips, fingerseq->total, sizeof(struct mypoint), qcompare1);
+	mypoint_temp.x = -1;
+	mypoint_temp.y = -1;
+	tmp_cvpnt.x = palm_center.x;
+	tmp_cvpnt.y = 999;
 	for (int i = 0; i < fingerseq->total; i++)
 	{
-		if (possible_tips[i].x>gaps[pnt] && possible_tips[i].y<palm_center.y + 0.3*palm_radius && ((palm_center.x - possible_tips[i].x)*(palm_center.x - possible_tips[i].x)) + ((palm_center.y - possible_tips[i].y)*(palm_center.y - possible_tips[i].y))>palm_radius*palm_radius*3.5)
+		//p.x = possible_tips[i].x;
+		//p.y = possible_tips[i].y;
+		//cvCircle(&frame, p, 5, CV_RGB(100, 0, 200), -1, CV_AA, 0);
+		if (/*(possible_tips[i].x>gaps[pnt].x || gaps[pnt].x==30000) &&*/get_cos_value(tmp_cvpnt, possible_tips[i])<0.98 &&possible_tips[i].y<palm_center.y + 0.3*palm_radius && ((palm_center.x - possible_tips[i].x)*(palm_center.x - possible_tips[i].x)) + ((palm_center.y - possible_tips[i].y)*(palm_center.y - possible_tips[i].y))>palm_radius*palm_radius*3.5)
 		{
 			cnt_finger++;
+			tmp_cvpnt.x = possible_tips[i].x;
+			tmp_cvpnt.y = possible_tips[i].y;
 			p.x = possible_tips[i].x;
 			p.y = possible_tips[i].y;
+			//checked_tips.push_back(mypoint_temp);
 			cvCircle(&frame, p, 5, CV_RGB(0,0,0), -1, CV_AA, 0);
-			while (gaps[++pnt] < possible_tips[i].x);
+			//while (gaps[++pnt].x < possible_tips[i].x);
 		}
 	}
+	
+	/*for (int i = 0; i < checked_tips.size(); i++)
+	{
+		if (get_cos_value(mypoint_temp, checked_tips[i]) < 0.8)
+		{
+			mypoint_temp.x = checked_tips[i].x;
+			mypoint_temp.y = checked_tips[i].y;
+			p.x = mypoint_temp.x;
+			p.y = mypoint_temp.y;
+			cvCircle(&frame, p, 5, CV_RGB(0, 0, 0), -1, CV_AA, 0);
+			cnt_finger++;
+		}
+	}*/
 	char tmp[30];
 	_itoa_s(cnt_finger, tmp, 10);
 	CvFont Font1 = cvFont(3, 3);
@@ -405,8 +453,8 @@ int mygesturedetect(Mat frame) //-1 undetected, 0-scissor, 1-rock, 2-paper
 	vector<Rect>().swap(faces);
 	faces.clear();
 	if (flag) return -1;
-	if (tips >= 3 && dfts >= 3) return 2; //paper
-	if (tips <=1 || dfts <= 1) return 1;
+	if (tips >= 3 && dfts >= 3 && tips<=6&&dfts<=5) return 2; //paper
+	if (tips ==0) return 1;
 	if (tips >= 1 && tips <= 3 && dfts >= 2 && dfts <= 4) return 0;
 	return -1;
 }
