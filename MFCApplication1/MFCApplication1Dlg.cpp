@@ -10,9 +10,11 @@
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
+cv::CascadeClassifier face_cascade;
+cv::CascadeClassifier fist_cascade;
 CvCapture* capture;
 CRect rect;
+IplImage* mybackground=NULL;
 CDC *pDC;
 HDC hDC;
 CWnd *pwnd;
@@ -20,9 +22,39 @@ int gamestartcounting = 0;
 int computergesture = 0;
 int usergesture = -1;//-1-undetected
 // CMFCApplication1Dlg dialog
-
-cv::CascadeClassifier face_cascade;
-
+#ifndef HISTORYQUEUE
+#define HISTORYQUEUE
+class historyqueue //To avoid error
+{
+public:
+	historyqueue()
+	{
+		int i;
+		for (i = 0; i < 5; i++) this->p[i] = -1;
+		this->current = 0;
+	}
+	void push(int x)
+	{
+		this->p[this->current] = x;
+		this->current++;
+		this->current = this->current % 5;
+	}
+	int query()
+	{
+		int i=(this->current-1)%5;
+		while (i != this->current)
+		{
+			if (this->p[this->current] != -1) return this->p[this->current];
+			i = (i - 1) % 5;
+		}
+		return -1;
+	}
+private:
+	int p[5];
+	int current;
+};
+#endif
+historyqueue* history = new historyqueue();
 CMFCApplication1Dlg::CMFCApplication1Dlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CMFCApplication1Dlg::IDD, pParent)
 {
@@ -43,6 +75,7 @@ BEGIN_MESSAGE_MAP(CMFCApplication1Dlg, CDialogEx)
 	ON_WM_CREATE()
 	ON_WM_DESTROY()
 	ON_WM_SHOWWINDOW()
+	ON_BN_CLICKED(IDC_BUTTON3, &CMFCApplication1Dlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 
@@ -116,11 +149,17 @@ void CMFCApplication1Dlg::OnTimer(UINT_PTR nIDEvent)
 		cv::Mat m = myframe;
 		CvvImage m_CvvImage;
 		m_CvvImage.CopyOf(myframe, 1);
-		if (true)
+		m_CvvImage.DrawToHDC(hDC, &rect);
+		m_CvvImage.Destroy();
+		usergesture = mygesturedetect(m);
+		switch (usergesture)
 		{
-			m_CvvImage.DrawToHDC(hDC, &rect);
-			usergesture = mygesturedetect(m, face_cascade);
+		case -1: GetDlgItem(IDC_STATICUSER)->SetWindowTextW(_T("You : Gesture Not Detected")); break;
+		case 0: GetDlgItem(IDC_STATICUSER)->SetWindowTextW(_T("You : Scissor")); break;
+		case 1: GetDlgItem(IDC_STATICUSER)->SetWindowTextW(_T("You : Rock")); break;
+		case 2: GetDlgItem(IDC_STATICUSER)->SetWindowTextW(_T("You : Paper")); break;
 		}
+		history->push(usergesture);
 	}
 	if (nIDEvent == 2){
 		TCHAR buf[50];
@@ -128,7 +167,7 @@ void CMFCApplication1Dlg::OnTimer(UINT_PTR nIDEvent)
 		GetDlgItem(IDC_STATICCOUNT)->SetWindowTextW(buf);
 		if (gamestartcounting < 0)
 		{
-			int u = usergesture;
+			int u = history->query();
 			switch (computergesture)
 			{
 			case 0: GetDlgItem(IDC_STATICCOUNT)->SetWindowTextW(_T("Scissor")); break;
@@ -216,7 +255,7 @@ int CMFCApplication1Dlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return 0;
 	}
 	if (!face_cascade.load("D:\haarcascade_frontalface_alt.xml")){ MessageBox(_T("--(!)Error loading haarcascade_frontalface_alt.xml\n")); };
-	
+	//if (!fist_cascade.load("fist.xml")){ MessageBox(_T("--(!)Error loading fist.xml\n")); };
 	IplImage* m_Frame;
 	m_Frame = cvQueryFrame(capture);
 	CvvImage m_CvvImage;
@@ -252,4 +291,13 @@ void CMFCApplication1Dlg::OnShowWindow(BOOL bShow, UINT nStatus)
 	m_Font1->CreatePointFont(160, _T("Arial Bold"));
 	CStatic * m_Label = (CStatic *)GetDlgItem(IDC_STATICCOUNT);
 	m_Label->SetFont(m_Font1);
+}
+
+
+void CMFCApplication1Dlg::OnBnClickedButton3()
+{
+	// TODO: Add your control notification handler code here
+	if (mybackground) cvReleaseImage(&mybackground);
+	mybackground = cvCloneImage(cvQueryFrame(capture));
+
 }
