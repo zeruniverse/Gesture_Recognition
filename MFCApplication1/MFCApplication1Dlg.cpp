@@ -41,12 +41,11 @@ public:
 	}
 	int query()
 	{
-		int i=(this->current-1)%5;
-		while (i != this->current)
-		{
-			if (this->p[this->current] != -1) return this->p[this->current];
-			i = (i - 1) % 5;
-		}
+		int j;
+		int q[3];
+		for (j = 0; j < 3; j++) q[j] = 0;
+		for (j = 0; j < 5; j++) if (this->p[j] != -1) q[this->p[j]]++;
+		for (j = 0; j < 3; j++) if (q[j] >= 3) return j;
 		return -1;
 	}
 private:
@@ -152,14 +151,15 @@ void CMFCApplication1Dlg::OnTimer(UINT_PTR nIDEvent)
 		m_CvvImage.DrawToHDC(hDC, &rect);
 		m_CvvImage.Destroy();
 		usergesture = mygesturedetect(m);
-		switch (usergesture)
+		history->push(usergesture);
+		switch (history->query())
 		{
 		case -1: GetDlgItem(IDC_STATICUSER)->SetWindowTextW(_T("You : Gesture Not Detected")); break;
 		case 0: GetDlgItem(IDC_STATICUSER)->SetWindowTextW(_T("You : Scissor")); break;
 		case 1: GetDlgItem(IDC_STATICUSER)->SetWindowTextW(_T("You : Rock")); break;
 		case 2: GetDlgItem(IDC_STATICUSER)->SetWindowTextW(_T("You : Paper")); break;
 		}
-		history->push(usergesture);
+		
 	}
 	if (nIDEvent == 2){
 		TCHAR buf[50];
