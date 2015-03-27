@@ -170,9 +170,9 @@ void CMFCApplication1Dlg::OnTimer(UINT_PTR nIDEvent)
 			int u = history->query();
 			switch (computergesture)
 			{
-			case 0: GetDlgItem(IDC_STATICCOUNT)->SetWindowTextW(_T("Scissor")); break;
-			case 1: GetDlgItem(IDC_STATICCOUNT)->SetWindowTextW(_T("Rock")); break;
-			case 2: GetDlgItem(IDC_STATICCOUNT)->SetWindowTextW(_T("Paper")); break;
+			case 0: GetDlgItem(IDC_STATICCOUNT)->SetWindowTextW(_T("Computer: Scissor")); break;
+			case 1: GetDlgItem(IDC_STATICCOUNT)->SetWindowTextW(_T("Computer: Rock")); break;
+			case 2: GetDlgItem(IDC_STATICCOUNT)->SetWindowTextW(_T("Computer: Paper")); break;
 			}
 			if (u == computergesture)
 			{

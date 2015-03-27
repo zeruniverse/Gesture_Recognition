@@ -113,15 +113,15 @@ void Get_hull()
 {
 	IplImage frame = myframe;
 	hull = cvConvexHull2(contours, hull_st, CV_CLOCKWISE, 0);
-	CvPoint pt_0 = **CV_GET_SEQ_ELEM(CvPoint*, hull, hull->total - 1);
+	CvPoint pt_tmp = **CV_GET_SEQ_ELEM(CvPoint*, hull, hull->total - 1);
 	CvPoint pt;
 	cvClearSeq(fingerseq);
 	for (int i = 0; i < hull->total; i++)
 	{
 		pt = **CV_GET_SEQ_ELEM(CvPoint*, hull, i);
 		//printf("%d,%d\n",pt.x,pt.y);
-		cvLine(&frame, pt_0, pt, CV_RGB(128, 128, 128), 2, 8, 0);
-		pt_0 = pt;
+		cvLine(&frame, pt_tmp, pt, CV_RGB(128, 128, 128), 2, 8, 0);
+		pt_tmp = pt;
 		cvSeqPush(fingerseq, &pt);
 		//cvCircle(&frame, pt, 5, CV_RGB(255,255,255), -1, CV_AA, 0);
 	}
@@ -385,7 +385,7 @@ int Get_fingertip() //number of fingertips
 		//p.x = possible_tips[i].x;
 		//p.y = possible_tips[i].y;
 		//cvCircle(&frame, p, 5, CV_RGB(100, 0, 200), -1, CV_AA, 0);
-		if (/*(possible_tips[i].x>gaps[pnt].x || gaps[pnt].x==30000) &&*/get_cos_value(tmp_cvpnt, possible_tips[i])<0.98 &&possible_tips[i].y<palm_center.y + 0.3*palm_radius && ((palm_center.x - possible_tips[i].x)*(palm_center.x - possible_tips[i].x)) + ((palm_center.y - possible_tips[i].y)*(palm_center.y - possible_tips[i].y))>palm_radius*palm_radius*3.5)
+		if (/*(possible_tips[i].x>gaps[pnt].x || gaps[pnt].x==30000) &&*/get_cos_value(tmp_cvpnt, possible_tips[i])<0.98 &&possible_tips[i].y<palm_center.y + 0.8*palm_radius && ((palm_center.x - possible_tips[i].x)*(palm_center.x - possible_tips[i].x)) + ((palm_center.y - possible_tips[i].y)*(palm_center.y - possible_tips[i].y))>palm_radius*palm_radius*3.5)
 		{
 			cnt_finger++;
 			tmp_cvpnt.x = possible_tips[i].x;
