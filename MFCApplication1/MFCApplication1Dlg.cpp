@@ -254,8 +254,7 @@ int CMFCApplication1Dlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		MessageBox(_T("FAIL TO START CAMERA"));
 		return 0;
 	}
-	if (!face_cascade.load("D:\haarcascade_frontalface_alt.xml")){ MessageBox(_T("--(!)Error loading haarcascade_frontalface_alt.xml\n")); };
-	//if (!fist_cascade.load("fist.xml")){ MessageBox(_T("--(!)Error loading fist.xml\n")); };
+	if (!face_cascade.load("haarcascade_frontalface_alt.xml")){ MessageBox(_T("Error loading haarcascade_frontalface_alt.xml\n")); };
 	IplImage* m_Frame;
 	m_Frame = cvQueryFrame(capture);
 	CvvImage m_CvvImage;
