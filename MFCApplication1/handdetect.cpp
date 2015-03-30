@@ -454,7 +454,7 @@ int mygesturedetect(Mat frame) //-1 undetected, 0-scissor, 1-rock, 2-paper
 	faces.clear();
 	if (flag) return -1;
 	if (tips >= 4 && dfts >= 3 && tips<=6&&dfts<=5) return 2; //paper
-	if (tips ==0 && dfts>=3 && dfts<=5) return 2;//paper, special case 1 (open palm with all fingers together)
+	if (tips ==0 && dfts>=2 && dfts<=5) return 2;//paper, special case 1 (open palm with all fingers together)
 	if (tips == 0) return 1;//rock
 	if (tips >= 1 && tips <= 2 && dfts >= 2 && dfts <= 4) return 0;//scissors
 	if (tips == 3 && dfts >= 2 && dfts <= 3) return 0;//scissors
