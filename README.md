@@ -1,6 +1,8 @@
 # Gesture_Recognition
 Recognize Rock, Scissors and Paper from video captured by camera  
   
+DEMO: https://www.youtube.com/watch?v=2Sp7oNF_qP0
+  
 Course Project:　SFU COMPUTER VISION
   
 Only use computer with one front web camera for test!  
