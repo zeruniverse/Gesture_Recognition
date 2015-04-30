@@ -8,3 +8,6 @@ Course Project:　FOR SFU COMPUTER VISION. See handdetect.cpp for computer visio
 Only use computer with one front web camera for test!  
   
 Environment：OpenCV 2.4.11, MFC, VS2013  
+  
+  
+Please keep a link to this repo if you use (part of) code of this project
