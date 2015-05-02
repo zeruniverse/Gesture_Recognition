@@ -15,4 +15,4 @@ opencv_highgui2411.lib;opencv_objdetect2411.lib;opencv_ts2411.lib;opencv_video24
 Please include opencv/2.4.11/staticlib in your project  
   
   
-**You must give appropriate credit (link to this repo) if you use (part of) this project. Appropriate copyright info is also required by GNU GPL 3.0**
+**You must give appropriate credit (link to this repo) if you use (part of) this project IN YOUR WORK. Appropriate copyright info is also required by GNU GPL 3.0**
