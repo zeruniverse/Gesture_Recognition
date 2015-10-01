@@ -10,6 +10,7 @@ environment:
   OPENCV_DIR:   C:/dev/opencv
   access_token:
     secure: YpYf5HPsbcr+3fZmDQZfsTasHYEeWDe5nnGpfq3QNtLLkv11fWOBHhFsJ0ohhZzU
+  git_repo: "git@github.com:zeruniverse/Gesture_Recognition.git"
     
 install:
   - cinst 7zip.commandline
@@ -31,9 +32,10 @@ on_success:
   - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
   - git config user.name "AutoBuild"
   - git config user.email "noreply@jeffery.cc"
+  - git remote add neworigin "$env:git_repo"
   - git add AutoBuild/Gesture_Recognition.exe
-  - git commit -m "Deploy Build $($env:APPVEYOR_BUILD_VERSION) to GitHub"
-  - git push --quiet > /dev/null 2>&1
+  - git commit -m "Deploy Build $(appveyor_build_version) to GitHub"
+  - git push neworigin "master" --quiet > /dev/null 2>&1
   
 notifications:
   - provider: Email
