@@ -1,9 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFCApplication1", "MFCApplication1\MFCApplication1.vcxproj", "{9B36713D-73E5-4BC9-B842-B858F2E3A481}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gesture_Recognition", "Gesture_Recognition\Gesture_Recognition.vcxproj", "{9B36713D-73E5-4BC9-B842-B858F2E3A481}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

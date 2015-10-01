@@ -1,4 +1,5 @@
-# Gesture_Recognition
+# Gesture_Recognition  
+[![Build status](https://ci.appveyor.com/api/projects/status/4sg95q809ro57k5c?svg=true)](https://ci.appveyor.com/project/zeruniverse/gesture-recognition)  
 Recognize Rock, Scissors and Paper from video captured by camera  
   
 DEMO: https://www.youtube.com/watch?v=2Sp7oNF_qP0  

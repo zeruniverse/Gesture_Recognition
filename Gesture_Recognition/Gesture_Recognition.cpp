@@ -1,26 +1,26 @@
 
-// MFCApplication1.cpp : Defines the class behaviors for the application.
+// Gesture_Recognition.cpp : Defines the class behaviors for the application.
 //
 
 #include "stdafx.h"
-#include "MFCApplication1.h"
-#include "MFCApplication1Dlg.h"
+#include "Gesture_Recognition.h"
+#include "Gesture_RecognitionDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
 
-// CMFCApplication1App
+// CGesture_RecognitionApp
 
-BEGIN_MESSAGE_MAP(CMFCApplication1App, CWinApp)
+BEGIN_MESSAGE_MAP(CGesture_RecognitionApp, CWinApp)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
 
-// CMFCApplication1App construction
+// CGesture_RecognitionApp construction
 
-CMFCApplication1App::CMFCApplication1App()
+CGesture_RecognitionApp::CGesture_RecognitionApp()
 {
 	// support Restart Manager
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_RESTART;
@@ -30,14 +30,14 @@ CMFCApplication1App::CMFCApplication1App()
 }
 
 
-// The one and only CMFCApplication1App object
+// The one and only CGesture_RecognitionApp object
 
-CMFCApplication1App theApp;
+CGesture_RecognitionApp theApp;
 
 
-// CMFCApplication1App initialization
+// CGesture_RecognitionApp initialization
 
-BOOL CMFCApplication1App::InitInstance()
+BOOL CGesture_RecognitionApp::InitInstance()
 {
 	// InitCommonControlsEx() is required on Windows XP if an application
 	// manifest specifies use of ComCtl32.dll version 6 or later to enable
@@ -70,7 +70,7 @@ BOOL CMFCApplication1App::InitInstance()
 	// such as the name of your company or organization
 	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
-	CMFCApplication1Dlg dlg;
+	CGesture_RecognitionDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)

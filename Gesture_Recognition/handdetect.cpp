@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include"cvheader.h"
 using namespace cv;
 using namespace std;

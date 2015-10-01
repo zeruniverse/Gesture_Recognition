@@ -1,10 +1,10 @@
-﻿
-// MFCApplication1Dlg.cpp : implementation file
+
+// Gesture_RecognitionDlg.cpp : implementation file
 //
 
 #include "stdafx.h"
-#include "MFCApplication1.h"
-#include "MFCApplication1Dlg.h"
+#include "Gesture_Recognition.h"
+#include "Gesture_RecognitionDlg.h"
 #include "afxdialogex.h"
 #include "cvheader.h"
 #ifdef _DEBUG
@@ -21,7 +21,7 @@ CWnd *pwnd;
 int gamestartcounting = 0;
 int computergesture = 0;
 int usergesture = -1;//-1-undetected
-// CMFCApplication1Dlg dialog
+// CGesture_RecognitionDlg dialog
 #ifndef HISTORYQUEUE
 #define HISTORYQUEUE
 class historyqueue //To avoid error
@@ -54,33 +54,33 @@ private:
 };
 #endif
 historyqueue* history = new historyqueue();
-CMFCApplication1Dlg::CMFCApplication1Dlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(CMFCApplication1Dlg::IDD, pParent)
+CGesture_RecognitionDlg::CGesture_RecognitionDlg(CWnd* pParent /*=NULL*/)
+	: CDialogEx(CGesture_RecognitionDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-void CMFCApplication1Dlg::DoDataExchange(CDataExchange* pDX)
+void CGesture_RecognitionDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 }
 
-BEGIN_MESSAGE_MAP(CMFCApplication1Dlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CGesture_RecognitionDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_WM_TIMER()
-	ON_BN_CLICKED(IDC_BUTTON1, &CMFCApplication1Dlg::OnBnClickedButton1)
-	ON_BN_CLICKED(IDC_BUTTON2, &CMFCApplication1Dlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON1, &CGesture_RecognitionDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CGesture_RecognitionDlg::OnBnClickedButton2)
 	ON_WM_CREATE()
 	ON_WM_DESTROY()
 	ON_WM_SHOWWINDOW()
-	ON_BN_CLICKED(IDC_BUTTON3, &CMFCApplication1Dlg::OnBnClickedButton3)
+	ON_BN_CLICKED(IDC_BUTTON3, &CGesture_RecognitionDlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 
-// CMFCApplication1Dlg message handlers
+// CGesture_RecognitionDlg message handlers
 
-BOOL CMFCApplication1Dlg::OnInitDialog()
+BOOL CGesture_RecognitionDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
@@ -104,7 +104,7 @@ BOOL CMFCApplication1Dlg::OnInitDialog()
 //  to draw the icon.  For MFC applications using the document/view model,
 //  this is automatically done for you by the framework.
 
-void CMFCApplication1Dlg::OnPaint()
+void CGesture_RecognitionDlg::OnPaint()
 {
 	if (IsIconic())
 	{
@@ -131,7 +131,7 @@ void CMFCApplication1Dlg::OnPaint()
 
 // The system calls this function to obtain the cursor to display while the user drags
 //  the minimized window.
-HCURSOR CMFCApplication1Dlg::OnQueryDragIcon()
+HCURSOR CGesture_RecognitionDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
@@ -139,7 +139,7 @@ HCURSOR CMFCApplication1Dlg::OnQueryDragIcon()
 
 
 
-void CMFCApplication1Dlg::OnTimer(UINT_PTR nIDEvent)
+void CGesture_RecognitionDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: Add your message handler code here and/or call default
 	if (nIDEvent == 1){
@@ -213,7 +213,7 @@ void CMFCApplication1Dlg::OnTimer(UINT_PTR nIDEvent)
 }
 
 
-void CMFCApplication1Dlg::OnBnClickedButton1()
+void CGesture_RecognitionDlg::OnBnClickedButton1()
 {
 	// TODO: Add your control notification handler code here
 	KillTimer(2);
@@ -228,7 +228,7 @@ void CMFCApplication1Dlg::OnBnClickedButton1()
 }
 
 
-void CMFCApplication1Dlg::OnBnClickedButton2()
+void CGesture_RecognitionDlg::OnBnClickedButton2()
 {
 	// TODO: Add your control notification handler code here
 	GetDlgItem(IDC_EDIT1)->SetWindowTextW(_T("0"));
@@ -237,7 +237,7 @@ void CMFCApplication1Dlg::OnBnClickedButton2()
 }
 
 
-int CMFCApplication1Dlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
+int CGesture_RecognitionDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CDialogEx::OnCreate(lpCreateStruct) == -1)
 		return -1;
@@ -270,7 +270,7 @@ int CMFCApplication1Dlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 }
 
 
-void CMFCApplication1Dlg::OnDestroy()
+void CGesture_RecognitionDlg::OnDestroy()
 {
 	CDialogEx::OnDestroy();
 
@@ -279,7 +279,7 @@ void CMFCApplication1Dlg::OnDestroy()
 }
 
 
-void CMFCApplication1Dlg::OnShowWindow(BOOL bShow, UINT nStatus)
+void CGesture_RecognitionDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialogEx::OnShowWindow(bShow, nStatus);
 
@@ -293,7 +293,7 @@ void CMFCApplication1Dlg::OnShowWindow(BOOL bShow, UINT nStatus)
 }
 
 
-void CMFCApplication1Dlg::OnBnClickedButton3()
+void CGesture_RecognitionDlg::OnBnClickedButton3()
 {
 	// TODO: Add your control notification handler code here
 	if (mybackground) cvReleaseImage(&mybackground);

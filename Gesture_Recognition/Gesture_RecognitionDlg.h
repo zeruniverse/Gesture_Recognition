@@ -1,16 +1,16 @@
 
-// MFCApplication1Dlg.h : header file
+// Gesture_RecognitionDlg.h : header file
 //
 
 #pragma once
 
 
-// CMFCApplication1Dlg dialog
-class CMFCApplication1Dlg : public CDialogEx
+// CGesture_RecognitionDlg dialog
+class CGesture_RecognitionDlg : public CDialogEx
 {
 // Construction
 public:
-	CMFCApplication1Dlg(CWnd* pParent = NULL);	// standard constructor
+	CGesture_RecognitionDlg(CWnd* pParent = NULL);	// standard constructor
 
 // Dialog Data
 	enum { IDD = IDD_MFCAPPLICATION1_DIALOG };
