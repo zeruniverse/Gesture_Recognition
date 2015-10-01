@@ -26,6 +26,7 @@ build_script:
 
 on_success:
   - copy /y c:\dev\bld\Release\Gesture_Recognition.exe c:\dev\gesture_recognition\AutoBuild\Gesture_Recognition.exe
+  - cd c:\dev\gesture_recognition
   - git config --global credential.helper store
   - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
   - git commit ...
