@@ -33,7 +33,7 @@ on_success:
   - git config user.email "noreply@jeffery.cc"
   - git remote add neworigin "https://github.com/zeruniverse/Gesture_Recognition.git"
   - git add AutoBuild/Gesture_Recognition.exe
-  - git commit -m "Deploy Build #%APPVEYOR_BUILD_VERSION% to GitHub"
+  - git commit -m "Deploy Build \#%APPVEYOR_BUILD_VERSION% to GitHub"
   - git push neworigin master
   
 notifications:
