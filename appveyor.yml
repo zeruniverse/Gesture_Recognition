@@ -1,4 +1,4 @@
-version: 1.0.{build}
+version: {build}
 
 branches:
   only:
@@ -31,9 +31,9 @@ on_success:
   - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
   - git config user.name "AutoBuild"
   - git config user.email "noreply@jeffery.cc"
-  - git remote add neworigin "git@github.com:zeruniverse/Gesture_Recognition.git"
+  - git remote add neworigin "https://github.com/zeruniverse/Gesture_Recognition.git"
   - git add AutoBuild/Gesture_Recognition.exe
-  - git commit -m "Deploy Build %APPVEYOR_BUILD_VERSION% to GitHub"
+  - git commit -m "Deploy Build #%APPVEYOR_BUILD_VERSION% to GitHub"
   - git push neworigin master
   
 notifications:
