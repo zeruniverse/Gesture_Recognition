@@ -8,7 +8,9 @@ clone_folder: c:\dev\gesture_recognition
 
 environment:
   OPENCV_DIR:   C:/dev/opencv
-
+  access_token:
+    secure: YpYf5HPsbcr+3fZmDQZfsTasHYEeWDe5nnGpfq3QNtLLkv11fWOBHhFsJ0ohhZzU
+    
 install:
   - cinst 7zip.commandline
   - ps:  $dwntool=New-Object System.Net.WebClient
@@ -18,8 +20,16 @@ install:
 build:
 
 build_script:
-  - cd c:\dev\gesture_recognition
+  - xcopy  c:\dev\gesture_recognition c:\dev\bld /s /e /y /i
+  - cd c:\dev\bld
   - msbuild /m /p:Configuration=Release /p:Platform="Win32" Gesture_Recognition.sln
+
+on_success:
+  - copy /y c:\dev\bld\Release\Gesture_Recognition.exe c:\dev\gesture_recognition\AutoBuild\Gesture_Recognition.exe
+  - git config --global credential.helper store
+  - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
+  - git commit ...
+  - git push ...
   
 notifications:
   - provider: Email
