@@ -19,9 +19,6 @@ build:
 
 build_script:
   - cd c:\dev\gesture_recognition
-  - md build
-  - cd build
-  - cmake -G"Visual Studio 12" ..
   - msbuild /m /p:Configuration=Release /p:Platform="Win32" Gesture_Recognition.sln
   
 notifications:
