@@ -29,8 +29,9 @@ on_success:
   - cd c:\dev\gesture_recognition
   - git config --global credential.helper store
   - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
-  - git commit ...
-  - git push ...
+  - git config user.name "AutoBuild"
+  - git commit -m "Deploy Build $($env:APPVEYOR_BUILD_VERSION) to GitHub"
+  - git push --quiet > /dev/null 2>&1
   
 notifications:
   - provider: Email
