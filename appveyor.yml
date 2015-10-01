@@ -25,14 +25,15 @@ build_script:
   - msbuild /m /p:Configuration=Release /p:Platform="Win32" Gesture_Recognition.sln
 
 on_success:
-  - copy /y c:\dev\bld\Release\Gesture_Recognition.exe c:\dev\gesture_recognition\AutoBuild\Gesture_Recognition.exe
-  - cd c:\dev\gesture_recognition
+  - git clone --branch=master https://github.com/zeruniverse/Gesture_Recognition.git c:\dev\topush
+  - copy /y c:\dev\bld\Release\Gesture_Recognition.exe c:\dev\topush\AutoBuild\Gesture_Recognition.exe
+  - cd c:\dev\topush
   - git config --global credential.helper store
   - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
   - git config user.name "AutoBuild"
   - git config user.email "noreply@jeffery.cc"
   - git add AutoBuild/Gesture_Recognition.exe
-  - git commit -m "Deploy Build ^#%APPVEYOR_BUILD_VERSION% to GitHub"
+  - git commit -m "Deploy Build #%APPVEYOR_BUILD_VERSION% to GitHub"
   - git show
   - git push
   
