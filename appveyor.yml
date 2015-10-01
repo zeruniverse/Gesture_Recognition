@@ -10,7 +10,7 @@ environment:
   OPENCV_DIR:   C:/dev/opencv
 
 install:
-  - cinst 7zip.commandline -x8
+  - cinst 7zip.commandline
   - ps:  $dwntool=New-Object System.Net.WebClient
   - ps:  $dwntool.DownloadFile('https://github.com/zeruniverse/Gesture_Recognition/releases/download/V1.0/opencv.zip','c:\dev\opencv.zip')
   - cmd: 7z x c:\dev\opencv.zip -oc:\dev\opencv -y > nul
