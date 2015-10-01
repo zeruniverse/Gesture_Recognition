@@ -30,6 +30,7 @@ on_success:
   - git config --global credential.helper store
   - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
   - git config user.name "AutoBuild"
+  - git config user.email "noreply@jeffery.cc"
   - git commit -m "Deploy Build $($env:APPVEYOR_BUILD_VERSION) to GitHub"
   - git push --quiet > /dev/null 2>&1
   
