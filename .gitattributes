@@ -2,7 +2,12 @@
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
 * text=auto
-
+*.sln text
+*.rc text
+*.xml text
+*.h text
+*.vcxproj text
+*.filters text
 ###############################################################################
 # Set default behavior for command prompt diff.
 #
