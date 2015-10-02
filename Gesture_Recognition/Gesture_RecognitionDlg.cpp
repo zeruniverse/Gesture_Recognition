@@ -15,6 +15,13 @@
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
+
+#ifndef UNICODE  
+  typedef std::string String; 
+#else
+  typedef std::wstring String; 
+#endif
+
 cv::CascadeClassifier face_cascade;
 cv::CascadeClassifier fist_cascade;
 CvCapture* capture;
