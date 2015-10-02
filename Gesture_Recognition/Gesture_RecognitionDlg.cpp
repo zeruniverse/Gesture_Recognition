@@ -16,12 +16,6 @@
 #define new DEBUG_NEW
 #endif
 
-#ifndef UNICODE  
-  typedef std::string String; 
-#else
-  typedef std::wstring String; 
-#endif
-
 cv::CascadeClassifier face_cascade;
 cv::CascadeClassifier fist_cascade;
 CvCapture* capture;
@@ -297,7 +291,11 @@ int CGesture_RecognitionDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		MessageBox(_T("FAIL TO START CAMERA"));
 		return 0;
 	}
-	if (!face_cascade.load(tmpxml)){ MessageBox(_T("Error loading haarcascade_frontalface_alt.xml\n")); };
+	
+	std::wstring arr_w( tmpxml );
+	std::string arr_s( arr_w.begin(), arr_w.end() );
+	
+	if (!face_cascade.load(arr_s)){ MessageBox(_T("Error loading haarcascade_frontalface_alt.xml\n")); };
 	IplImage* m_Frame;
 	m_Frame = cvQueryFrame(capture);
 	CvvImage m_CvvImage;
