@@ -7,6 +7,11 @@
 #include "Gesture_RecognitionDlg.h"
 #include "afxdialogex.h"
 #include "cvheader.h"
+#include "resource.h"
+
+#include <conio.h>
+#include <stdio.h>
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -98,6 +103,28 @@ BOOL CGesture_RecognitionDlg::OnInitDialog()
 	pwnd->GetClientRect(&rect);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
+}
+
+//Let's put the xml file to the resource.
+//extract resource to the temp file
+bool extract_rc(LPCTSTR dist, LPCTSTR type, LPCTSTR name)
+{
+
+	HANDLE tmpfile = ::CreateFile(dist, GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_TEMPORARY, NULL);
+	if (tmpfile == INVALID_HANDLE_VALUE)
+		return false;
+
+
+	HRSRC    res = ::FindResource(NULL, name, type);
+	HGLOBAL    mem = ::LoadResource(NULL, res);
+	DWORD    dw_size = ::SizeofResource(NULL, res);
+
+
+	DWORD dw_write = 0;
+	::WriteFile(tmpfile, mem, dw_size, &dw_write, NULL);
+	::CloseHandle(tmpfile);
+
+	return true;
 }
 
 // If you add a minimize button to your dialog, you will need the code below
@@ -239,14 +266,23 @@ void CGesture_RecognitionDlg::OnBnClickedButton2()
 
 int CGesture_RecognitionDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
+	TCHAR tmpxml[_MAX_PATH];
+	::GetTempPath(_MAX_PATH, tmpxml);
+	_tcscat_s(tmpxml, _T("face.xml"));
+	
+	if (!extract_rc(tmpxml, _T("XML"), MAKEINTRESOURCE(IDR_XML1)))
+	{
+		MessageBox(_T("FAIL TO EXTRACT FILE TO TMP"));
+		return 0;
+	}
+
 	if (CDialogEx::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	// TODO:  Add your specialized creation code here
+	
 	if (!capture)
 	{
-		capture = cvCaptureFromCAM(0);
-		  
+		capture = cvCaptureFromCAM(0);		  
 	}
 
 	if (!capture)
@@ -254,7 +290,7 @@ int CGesture_RecognitionDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		MessageBox(_T("FAIL TO START CAMERA"));
 		return 0;
 	}
-	if (!face_cascade.load("haarcascade_frontalface_alt.xml")){ MessageBox(_T("Error loading haarcascade_frontalface_alt.xml\n")); };
+	if (!face_cascade.load(tmpxml)){ MessageBox(_T("Error loading haarcascade_frontalface_alt.xml\n")); };
 	IplImage* m_Frame;
 	m_Frame = cvQueryFrame(capture);
 	CvvImage m_CvvImage;
@@ -265,7 +301,10 @@ int CGesture_RecognitionDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		//cvWaitKey(10);  
 	}
 
+	DeleteFile(tmpxml);
+
 	SetTimer(1, 11, NULL);
+	
 	return 0;
 }
 
