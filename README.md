@@ -1,19 +1,64 @@
 # Gesture_Recognition  
 [![Build status](https://ci.appveyor.com/api/projects/status/ixkg1f06acmxdd26?svg=true)](https://ci.appveyor.com/project/zeruniverse/gesture-recognition)  
-Recognize Rock, Scissors and Paper from video captured by camera  
+Recognize Rock, Scissors and Paper from video captured by camera Course Project FOR SFU COMPUTER VISION.  
+And play the game rock-paper-scissors with your computer!  
   
-DEMO: https://www.youtube.com/watch?v=2Sp7oNF_qP0  
+##DEMO  
+[YouTube Video](https://www.youtube.com/watch?v=2Sp7oNF_qP0)  
   
-Course Project:　FOR SFU COMPUTER VISION. See handdetect.cpp for computer vision implementation  
+<img width="622" alt="cc1" src="https://cloud.githubusercontent.com/assets/4648756/10240677/f30f9d5e-6893-11e5-937f-f82abc74b322.PNG">
+<img width="619" alt="cc2" src="https://cloud.githubusercontent.com/assets/4648756/10240698/41de56f0-6894-11e5-81b4-6ccf11856239.PNG">
+<img width="619" alt="cc3" src="https://cloud.githubusercontent.com/assets/4648756/10240699/479e199a-6894-11e5-8fc8-4e99aaac580a.PNG">  
   
-Only use computer with one front web camera for test!  
+##Download  
+You don't need to build the project yourself if you only want to try it. Download the binary EXE from one of the following links:    
++ [Stable Release](https://github.com/zeruniverse/Gesture_Recognition/releases/download/V1.3/Gesture_Recognition.exe)
++ [Latest Build (AutoBuild)](https://github.com/zeruniverse/Gesture_Recognition/blob/master/AutoBuild/Gesture_Recognition.exe?raw=true)
+
+The binary above is built with the assuption that the computer has at least one webcam and the front webcam is the default one. If you want to change this setting, you need to modify function `CGesture_RecognitionDlg::OnCreate` in file `Gesture_Recognition/Gesture_RecognitionDlg.cpp`  
   
-Environment：OpenCV 2.4.11, MFC, VS2013  
-    
-Please add these as dependencies:  
-opencv_highgui2411.lib;opencv_objdetect2411.lib;opencv_ts2411.lib;opencv_video2411.lib;opencv_nonfree2411.lib;opencv_ocl2411.lib;opencv_photo2411.lib;opencv_stitching2411.lib;opencv_superres2411.lib;opencv_videostab2411.lib;opencv_calib3d2411.lib;opencv_contrib2411.lib;opencv_core2411.lib;opencv_features2d2411.lib;opencv_flann2411.lib;opencv_gpu2411.lib;opencv_imgproc2411.lib;opencv_legacy2411.lib;opencv_ml2411.lib;IlmImf.lib;libjasper.lib;libjpeg.lib;libpng.lib;libtiff.lib;zlib.lib;comctl32.lib;gdi32.lib;vfw32.lib;  
+AutoBuild version is pushed to this repository by the CI:  [AppVeyor](https://ci.appveyor.com/project/zeruniverse/gesture-recognition). Successful build will be pushed after each commit automatically. See file `appveyor.yml` for details.  
   
-Please include opencv/2.4.11/staticlib in your project  
+##Build Environment  
++ [OpenCV 2.4.11](https://github.com/zeruniverse/Gesture_Recognition/releases/download/V1.0/opencv.zip)  
++ MFC  
++ Microsoft Visual Studio 2013  
+   
+##Build Steps  
++ Set system environment variable `OPENCV_DIR` with value to be your OpenCV directory. E.G. `c:/opencv`  
++ Build the project with MS VS2013  
++ Set platform `WIN32(x86)` and use `Release` configuration  
++ Please use OpenCV with version 2.4.11 exactly  
++ If you want to configure project dependency yourself, use `staticlib`  
   
+##Dependency  
+Please refer to the file `Gesture_Recognition/Gesture_Recognition.vcxproj`  
   
+##Implementation Overview  
+###Face Detection  
+Haar-like features (algorithm implemented in OpenCV).  
+###Skin Color Modeling  
+Use face color to build skin color model   
+###Apply Skin Color Detection  
+Detect hand region and remove face  
+###Background Removing  
+Remove background (noise)  
+###Find Largest Contour  
+This makes the shape of the hand.  
+###Get Convex Hull and Convexity Defects of Hand  
+###Find Palm Center  
+Will be used to determine Fingertips
+###Find Convexity Defects Representing Gaps Between Fingers
+Convexity Defects is feature 1. 
+###Find Fingertips  
+Number of fingertips is feature 2.  
+###Build Decision Tree  
+With feature 1 & 2  
+###Use History to Avoid Noise  
+Use a queue to record history  
+###Game and UI Design  
+Use MFC to implement the UI and randomize the gesture of the computer  
+
+##License  
+GNU GPL 3.0  
 **You must give appropriate credit (link to this repo) if you use (part of) this project IN YOUR WORK. Appropriate copyright info is also required by GNU GPL 3.0**
