@@ -58,7 +58,15 @@ With feature 1 & 2
 Use a queue to record history  
 ###Game and UI Design  
 Use MFC to implement the UI and randomize the gesture of the computer  
-
+  
+##Reference  
+1.	Hand tracking and gesture recognition system for human-computer interaction using low-cost hardware, Hui-Shyong Yeo & Byung-Gook Lee & Hyotaek Lim, Dongseo University, Multimedia Tools Application, May 2013  
+2.	Visual Processing of Rock, Scissors, Paper Game for Human Robot Interaction, Ho-sub Yoon & Su-Young Chi, Division of Intellgent Robot, SICE-ICASE International Joint Conference 2006  
+3.	Chai D, Ngan KN (1999) Face segmentation using skin-color map in videophone applications. IEEE Trans Circ Syst Video Technol 9(4):551-564   
+4.	Real-Time Palm Tracking and Hand Gesture Estimation Based on Fore-Arm Contour, Weishao Chen, National Taiwan University of Science and Technology, July 2011.  
+5.	Vision-Based Finger Action Recognition by Angle Detection and Contour Analysis, Daeho Lee & SeungGwan Lee, ETRI Journal, vol. 33, no. 3, June. 2011, pp. 415-422.  
+6.	Vision based gesture recognition system with single camera, Wei Du & Hua Li, CAD Lab, Institute of Computing Technology, Chinese Academy of Science, Signal Processing Proceedings, 2000. WCCC-ICSP 2000. 5th International Conference on Volume:2  
+  
 ##License  
 GNU GPL 3.0  
 **You must give appropriate credit (link to this repo) if you use (part of) this project IN YOUR WORK. Appropriate copyright info is also required by GNU GPL 3.0**
