@@ -1,7 +1,7 @@
 # Gesture_Recognition  
 [![Build status](https://ci.appveyor.com/api/projects/status/ixkg1f06acmxdd26?svg=true)](https://ci.appveyor.com/project/zeruniverse/gesture-recognition)  
-Recognize Rock, Scissors and Paper from video captured by camera Course Project FOR SFU COMPUTER VISION.  
-And play the game rock-paper-scissors with your computer!  
+Recognize Rock, Scissors and Paper from video captured by camera. And play the game rock-paper-scissors with your computer!  
+Course Project FOR SFU COMPUTER VISION  
   
 ##DEMO  
 [YouTube Video](https://www.youtube.com/watch?v=2Sp7oNF_qP0)  
