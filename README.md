@@ -19,6 +19,14 @@ The binary above is built with the assuption that the computer has at least one 
   
 AutoBuild version is pushed to this repository by the CI:  [AppVeyor](https://ci.appveyor.com/project/zeruniverse/gesture-recognition). Successful build will be pushed after each commit automatically. See file `appveyor.yml` for details.  
   
+##How to use  
++ Start the program. Make yourself in the video stream captured by the camera.  
++ Don't put your hand in the scene for now. Click the button 'Set Background'. This will make the program take a snapshot of the current scene and it will be used in the future for background removal.  
++ Put your hand in the scene, test if you can see your hand and if your gesture is detected.  
++ Start game by clicking 'Start Game' button.   
++ Reset score board by clicking 'Reset Score Board' button.    
++ If you see the program detects something in the background on the detection window, you might need to set background again.   
+    
 ##Build Environment  
 + [OpenCV 2.4.11](https://github.com/zeruniverse/Gesture_Recognition/releases/download/V1.0/opencv.zip)  
 + MFC  
