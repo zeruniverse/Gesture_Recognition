@@ -13,8 +13,7 @@ Course Project FOR SFU COMPUTER VISION
 ##Download  
 You don't need to build the project yourself if you only want to try it. Download the binary EXE from one of the following links:    
 + [Stable Release](https://github.com/zeruniverse/Gesture_Recognition/releases/download/V1.3/Gesture_Recognition.exe)
-+ [Latest Build (AutoBuild)](https://github.com/zeruniverse/Gesture_Recognition/blob/master/AutoBuild/Gesture_Recognition.exe?raw=true)
-
+    
 The binary above is built with the assuption that the computer has at least one webcam and the front webcam is the default one. If you want to change this setting, you need to modify function `CGesture_RecognitionDlg::OnCreate` in file `Gesture_Recognition/Gesture_RecognitionDlg.cpp`  
   
 AutoBuild version is pushed to this repository by the CI:  [AppVeyor](https://ci.appveyor.com/project/zeruniverse/gesture-recognition). Successful build will be pushed after each commit automatically. See file `appveyor.yml` for details.  
