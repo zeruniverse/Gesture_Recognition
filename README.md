@@ -30,7 +30,7 @@ The binary above is built with the assuption that the computer has at least one 
 + Microsoft Visual Studio 2013  
    
 ##Build Steps  
-+ Set system environment variable `OPENCV_DIR` with value to be your OpenCV directory. E.G. `c:/opencv`  
++ Download `OpenCV 2.4.11` from the link above, unzip all files to `C:\opencv` (If you don't want to unzip files into `C:\opencv`, you need to edit `/Gesture_Recognition/Gesture_Recognition.vcxproj` with some plain text editor)    
 + Build the project with MS VS2013  
 + Set platform `WIN32(x86)` and use `Release` configuration  
 + Please use OpenCV with version 2.4.11 exactly  

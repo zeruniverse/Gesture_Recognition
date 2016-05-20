@@ -6,17 +6,13 @@ branches:
 
 clone_folder: c:\dev\gesture_recognition
 
-environment:
-  OPENCV_DIR:   C:/dev/opencv
-    
 install:
   - cinst 7zip.commandline
   - ps:  $dwntool=New-Object System.Net.WebClient
   - ps:  $dwntool.DownloadFile('https://github.com/zeruniverse/Gesture_Recognition/releases/download/V1.0/opencv.zip','c:\dev\opencv.zip')
-  - cmd: 7z x c:\dev\opencv.zip -oc:\dev\opencv -y > nul
+  - cmd: 7z x c:\dev\opencv.zip -oc:\opencv -y > nul
 
 build:
-
 build_script:
   - xcopy  c:\dev\gesture_recognition c:\dev\bld /s /e /y /i
   - cd c:\dev\bld
