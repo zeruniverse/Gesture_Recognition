@@ -18,6 +18,9 @@ build_script:
   - cd c:\dev\bld
   - msbuild /m /p:Configuration=Release /p:Platform="Win32" Gesture_Recognition.sln
 
+on_success:
+  - cd c:\dev\bld\Release
+  - dir
   
 notifications:
   - provider: Email
