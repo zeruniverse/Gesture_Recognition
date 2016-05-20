@@ -16,8 +16,6 @@ You don't need to build the project yourself if you only want to try it. Downloa
     
 The binary above is built with the assuption that the computer has at least one webcam and the front webcam is the default one. If you want to change this setting, you need to modify function `CGesture_RecognitionDlg::OnCreate` in file `Gesture_Recognition/Gesture_RecognitionDlg.cpp`  
   
-AutoBuild version is pushed to this repository by the CI:  [AppVeyor](https://ci.appveyor.com/project/zeruniverse/gesture-recognition). Successful build will be pushed after each commit automatically. See file `appveyor.yml` for details.  
-  
 ##How to use  
 + Start the program. Make yourself in the video stream captured by the camera.  
 + Don't put your hand in the scene for now. Click the button 'Set Background'. This will make the program take a snapshot of the current scene and it will be used in the future for background removal.  
