@@ -1,6 +1,6 @@
 # Gesture_Recognition  
 [![Build status](https://ci.appveyor.com/api/projects/status/ixkg1f06acmxdd26?svg=true)](https://ci.appveyor.com/project/zeruniverse/gesture-recognition)  
-Recognize Rock, Scissors and Paper from video captured by the camera. And play the game rock-paper-scissors with your computer!  
+Recognize Rock, Scissors and Paper from video captured by the camera. Play rock-paper-scissors with your computer!  
 Course Project FOR SFU COMPUTER VISION  
   
 ## DEMO  
@@ -11,14 +11,14 @@ Course Project FOR SFU COMPUTER VISION
 <img width="619" alt="cc3" src="https://cloud.githubusercontent.com/assets/4648756/10240699/479e199a-6894-11e5-8fc8-4e99aaac580a.PNG">  
   
 ## Download  
-You don't need to build the project yourself if you only want to try it. Download the binary EXE from one of the following links:    
+You do not need to build the project yourself if you only want to try it. Download the binary EXE from the following link:    
 + [Stable Release](https://github.com/zeruniverse/Gesture_Recognition/releases/download/V1.3/Gesture_Recognition.exe)
     
-The binary above is built with the assumption that the computer has at least one webcam, and the front webcam is the default one. If you want to change this setting, you need to modify function `CGesture_RecognitionDlg::OnCreate` in file `Gesture_Recognition/Gesture_RecognitionDlg.cpp`  
+The binary above assumes that the computer has at least one webcam, and the front webcam is the default one. If you want to change this setting, you need to modify function `CGesture_RecognitionDlg::OnCreate` in file `Gesture_Recognition/Gesture_RecognitionDlg.cpp`  
   
 ## How to use  
 + Start the program. Make yourself in the video stream captured by the camera.  
-+ Don't put your hand in the scene for now. Click the button 'Set Background'. This will make the program take a snapshot of the current scene and it will be used in the future for background removal.  
++ Do not put your hand in the scene for now. Click the button 'Set Background' which will make the program take a snapshot of the current scene and it will be used for futural background removal.  
 + Put your hand in the scene, test if you can see your hand and if your gesture is detected.  
 + Start the game by clicking 'Start Game' button.   
 + Reset scoreboard by clicking 'Reset Score Board' button.    
